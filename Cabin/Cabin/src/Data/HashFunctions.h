@@ -4,7 +4,7 @@
 
 namespace HashFunctions
 {
-	static const u32 hashSeed32 = 0xBadDecaf;
+	static constexpr u32 hashSeed32 = 0xBadDecaf;
 
 	/*
 	Summary:
@@ -12,7 +12,7 @@ namespace HashFunctions
 	*/
 	static u32 Hash(u8 n, const u32 seed)
 	{
-		return (u32)((n >> 4) ^ n * (u8)(seed >> 2));
+		return ((u32)n * seed) ^ n;
 	}
 	/*
 	Summary:
