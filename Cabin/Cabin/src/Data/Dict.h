@@ -53,6 +53,13 @@ namespace Internal
 	};
 }
 
+template <typename Key, typename Value>
+struct KeyValuePair
+{
+	Key key;
+	Value value;
+};
+
 /*
 Summary:
 A dynamic and fixed dictionary class, maps values to keys for use with lookups.
@@ -64,16 +71,7 @@ template <typename Key, typename Value>
 class Dict
 {
 public:
-	class KeyValue
-	{
-	public:
-		KeyValue() : key(), value() {}
-		KeyValue(const Key& _key) : key(_key), value() {}
-		KeyValue(const Key& _key, const Value& _value) : key(_key), value(_value) {}
-		Key key;
-		Value value;
-	};
-
+	using KeyValue = KeyValuePair<Key, Value>;
 	using KeyHash = HashFunctions::HashKey<Key>;
 	using Iterator = Internal::DictIterator<Dict<Key, Value>, KeyValue>;
 	friend Iterator;
@@ -93,6 +91,10 @@ public:
 	Dict(int _capacity, int _growth, const Key& nullKey)
 	{
 		Init(_capacity, _growth, nullKey);
+	}
+	Dict(std::initializer_list<KeyValue> l)
+	{
+		Init(l);
 	}
 	Dict(const Dict& that) = delete;
 	~Dict()
@@ -149,6 +151,15 @@ public:
 		capacity = _capacity;
 		nullKey = nullKey;
 		_Resize(capacity);
+	}
+	/*
+	Summary:
+	Initialises the dictionary with an initialiser list.
+	*/
+	void Init(std::initializer_list<KeyValue> l)
+	{
+		Init(l.size(), -1, KeyHash::GetNullKey());
+		for (const KeyValue* curr = l.begin(); curr != l.end(); ++curr) Add(curr->key, curr->value);
 	}
 
 	/*
@@ -262,9 +273,6 @@ public:
 		return false;
 	}
 
-	Iterator begin() const { return { this, _GetAt(0) }; }
-	Iterator end() const { return { this, _GetAt(capacity) }; }
-
 	/*
 	Summary:
 	Returns the capacity of this Dict.
@@ -280,6 +288,9 @@ public:
 	Returns the NullKey for of this Dict.
 	*/
 	const Key& GetNullKey() const { return nullKey; }
+
+	Iterator begin() const { return { this, _GetAt(0) }; }
+	Iterator end() const { return { this, _GetAt(capacity) }; }
 
 private:
 

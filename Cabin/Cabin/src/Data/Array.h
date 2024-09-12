@@ -15,12 +15,16 @@ public:
 	{
 		Init(_size);
 	}
+	Array(std::initializer_list<T> l)
+	{
+		Init(l);
+	}
 	~Array()
 	{
 		Clear();
 	}
 
-	T& operator[](int index) const
+	T& operator[](unsigned int index) const
 	{
 		ASSERT_MSG(index >= 0 && index < size, "Array random lookup index out of range.");
 		return *Get(index);
@@ -94,10 +98,25 @@ public:
 	{
 		Clear();
 		size = _size;
-		data = malloc(sizeof(T) * _size);
+		data = malloc(sizeof(T) * size);
 
-		for (T* curr = Get(0); curr < Get(size); curr++)
-			new(curr) T();
+		for (T* curr = begin(); curr < end(); curr++) new(curr) T();
+	}
+
+	/*
+	Summary:
+	Initialises the Array with a initialiser list.
+	[Note: Calling this will clean up the current Array before recreation]
+	*/
+	void Init(std::initializer_list<T> l)
+	{
+		Clear();
+		size = l.size();
+		data = malloc(sizeof(T) * size);
+
+		const T* toRead = l.begin();
+		T* curr = begin();
+		while (curr != end()) new(curr++) T(*(toRead++));
 	}
 
 	/*

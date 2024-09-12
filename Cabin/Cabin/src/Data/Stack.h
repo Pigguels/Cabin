@@ -28,6 +28,10 @@ public:
 	{
 		Init(_capacity, _growth);
 	}
+	Stack(std::initializer_list<T> l)
+	{
+		Init(l);
+	}
 	Stack(const Stack& that) = delete;
 	~Stack()
 	{
@@ -36,26 +40,20 @@ public:
 
 	void operator=(const Stack& index) = delete;
 
-	T& operator[](int index) const
-	{
-		ASSERT_MSG(index >= 0 && index < top, "Stack random lookup index out of range.");
-		return *_GetAt(index);
-	}
+	T& operator[](unsigned int index) const { return Get(index); }
 
 	/* Enable enum classes to be used for an index */
-	template <typename E>
-	T& operator[](const E& enumeration) const
+	template <typename E> T& operator[](const E& enumeration) const
 	{
 		int index = static_cast<typename std::underlying_type<E>::type>(enumeration);
-		ASSERT_MSG(index >= 0 && index < top, "Stack enum index out of range.");
-		return *_GetAt(index);
+		return Get(index);
 	}
 
 	/*
 	Summary:
 	Returns the item at the given index of this Stack.
 	*/
-	T& Get(int index) const
+	T& Get(unsigned int index) const
 	{
 		ASSERT_MSG(index >= 0 && index < top, "Stack::At index out of range.");
 		return *_GetAt(index);
@@ -66,7 +64,7 @@ public:
 	Tries to access the item at the given index.
 	Returns a pointer to the item if it exists, otherwise nullptr is returned.
 	*/
-	T* TryGet(int index) const { return (index >= 0 && index < top) ? _GetAt(index) : nullptr; }
+	T* TryGet(unsigned int index) const { return (index >= 0 && index < top) ? _GetAt(index) : nullptr; }
 
 	/*
 	Summary:
@@ -115,6 +113,17 @@ public:
 		growth = _growth;
 		top = 0;
 		_Resize(capacity);
+	}
+
+	/*
+	Summary:
+	Initialises the Stack with an initialiser list.
+	[Note: Calling this will clean up the current Stack before recreation]
+	*/
+	void Init(std::initializer_list<T> l)
+	{
+		Init(l.size(), -1);
+		for (const T* it = l.begin(); it != l.end(); ++it) Add(*it);
 	}
 
 	/*
