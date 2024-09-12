@@ -2,8 +2,6 @@
 #include "Graphics/Colour.h"
 #include "Core/Debug.h"
 
-//#define GLFW_INCLUDE_NONE
-//#include <glfw3.h>
 #include <glad.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -37,10 +35,12 @@ bool Texture::Upload()
 	if (!texture) glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	if (colourChannels == ColourChannels::Grey) glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
-	else if (colourChannels == ColourChannels::GreyAlpha) glTexImage2D(GL_TEXTURE_2D, 0, GL_RG, width, height, 0, GL_RG, GL_UNSIGNED_BYTE, data);
-	else if (colourChannels == ColourChannels::RGB) glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	else if (colourChannels == ColourChannels::RGBA) glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	unsigned int format = 0;
+	if (colourChannels == ColourChannels::Grey) format = GL_RED;
+	else if (colourChannels == ColourChannels::GreyAlpha) format = GL_RG;
+	else if (colourChannels == ColourChannels::RGB) format = GL_RGB;
+	else if (colourChannels == ColourChannels::RGBA) format = GL_RGBA;
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 	if (mipmaps) glGenerateMipmap(GL_TEXTURE_2D);
 	
@@ -82,7 +82,7 @@ void Texture::Bind(int textureIndex) const
 void Texture::Unbind(int textureIndex) const
 {
 	glActiveTexture(GL_TEXTURE0 + textureIndex);
-	glBindTexture(GL_TEXTURE_2D + textureIndex, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::ClearTexture()
@@ -133,14 +133,16 @@ bool Texture::LoadImageFromDisk(const char* filePath, FilterType _filterType, bo
 unsigned int Texture::GetPixel(int x, int y) const
 {
 	ASSERT_MSG((x > -1 && x < width && y > -1 && y < height), "Texture GetPixel coordinates out of range.");
+	if (!data) return 0;
 	return (unsigned int&)data[(width * y + x) * (int)colourChannels] & (0xFFFFFFFF >> (32 - 8 * (int)colourChannels));
 }
 void Texture::SetPixel(int x, int y, unsigned int colour)
 {
 	ASSERT_MSG((x > -1 && x < width && y > -1 && y < height), "Texture SetPixel coordinates out of range.");
 
-	// need to take another look at this since i really dont trust it to not write over neighboring pixels
+	if (!data) return;
 
+	// need to take another look at this since i really dont trust it to not write over neighboring pixels
 	unsigned int mask = (0xFFFFFFFF >> (32 - 8 * (int)colourChannels));
 	(unsigned int&)data[(width * y + x) * (int)colourChannels] = (colour & mask) | ((unsigned int&)data[(width * y + x) * (int)colourChannels] & ~mask);
 }

@@ -1,16 +1,7 @@
 #pragma once
+#include "Graphics/ColourChannels.h"
 
 struct Colour;
-
-enum class ColourChannels : int
-{
-	// this is synced up with stb_images colour types
-	None = 0,
-	Grey = 1,
-	GreyAlpha = 2,
-	RGB = 3,
-	RGBA = 4,
-};
 
 enum class FilterType : int
 {
@@ -41,7 +32,7 @@ public:
 	void Unbind(int textureIndex) const;
 
 	void ClearTexture();
-	// this will handle the memory of the data that is passed in, be aware
+	// this will handle the memory of the data that is passed in, be aware, also no data has to be passed in if the texture memory is going to be handled gpu side
 	void CreateTexture(unsigned char* _imageData, int _width, int _height, ColourChannels _colourChannels, FilterType _filterType = FilterType::Nearest, bool _mipmaps = false);
 	bool LoadImageFromDisk(const char* filePath, FilterType _filterType = FilterType::Nearest, bool _mipmaps = false);
 
