@@ -1,15 +1,15 @@
-#Devoloped by Harley Bekker
-#For use in/on personal and commercial projects
-#Permision is needed to use Cabin in projects that are not affiliated with or by Harley Bekker
+Developed by Harley Bekker.
+For use in/on personal and commercial projects.
+Permision is needed to use Cabin in projects that are not affiliated with or by Harley Bekker.
 
-#External libraries/code used:
+# External libraries/code used:
 - glad
 - GLFW
 - stb_image
 
 Cabin Engine
 
-
+TO DO: write up this read me haha
 
 
 
