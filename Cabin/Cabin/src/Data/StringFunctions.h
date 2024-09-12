@@ -329,31 +329,52 @@ namespace StringFunctions
 	static float ToFloat(const char* str)
 	{
 		float total = 0;
-		bool neg = *str == '-';
-		if (neg) ++str;
-		
-		while (*str != '.' && *str != '\0') // whole
-		{
-			total *= 10;
-			total += ToInt(*(str++));
-		}
+		int sign = 1;
+		int decimalShift = 0;
+		int exponent = 0;
+		int exponentSign = 1;
 
-		if (*str == '.') // fractional
+		if (*str == '-') sign = -1, ++str;
+		if (*str == '0') ++str; // is this needed?
+		while (*str >= '0' && *str <= '9') total = total * 10 + (*(str++) - '0');
+		if (*str == '.' && ++str) while (*str >= '0' && *str <= '9') { total = total * 10 + (*(str++) - '0'); --decimalShift; }
+		if (*str == 'e' || *str == 'E')
 		{
 			++str;
-			float fract = 0;
-			int digits = 0;
-			while (*str != '\0')
-			{
-				fract *= 10;
-				fract += ToInt(*(str++));
-				++digits;
-			}
-			while (digits--) fract *= 0.1f;
-			total += fract;
+			if (*str == '-') exponentSign = -1, ++str;
+			else if (*str == '+') ++str;
+			while (*str >= '0' && *str <= '9') exponent = exponent * 10 + (*(str++) - '0');
 		}
 
-		return neg ? total * -1 : total;
+		total = total * sign * pow(10, decimalShift + exponent * exponentSign);
+		return total;
+
+		//float total = 0;
+		//bool neg = *str == '-';
+		//if (neg) ++str;
+		//
+		//while (*str != '.' && *str != '\0') // whole
+		//{
+		//	total *= 10;
+		//	total += ToInt(*(str++));
+		//}
+		//
+		//if (*str == '.') // fractional
+		//{
+		//	++str;
+		//	float fract = 0;
+		//	int digits = 0;
+		//	while (*str != '\0')
+		//	{
+		//		fract *= 10;
+		//		fract += ToInt(*(str++));
+		//		++digits;
+		//	}
+		//	while (digits--) fract *= 0.1f;
+		//	total += fract;
+		//}
+		//
+		//return neg ? total * -1 : total;
 	}
 
 	static char* FloatToStr(char* outStr, float n)
@@ -371,7 +392,7 @@ namespace StringFunctions
 
 			int wholeN = n;
 			int decimalPos = 0;
-			while ((wholeN = n) != n)
+			while ((wholeN = (int)n) != n)
 			{
 				n *= 10;
 				++decimalPos;

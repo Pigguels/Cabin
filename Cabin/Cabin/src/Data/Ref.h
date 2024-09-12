@@ -11,11 +11,7 @@ class Ref
 {
 public:
 	Ref() : ref(nullptr) {}
-	Ref(const Ref& that)
-	{
-		ref = that.ref;
-		AddRef();
-	}
+	Ref(const Ref& that) : ref(that.ref) { AddRef(); }
 	~Ref()
 	{
 		DecRef();
@@ -26,8 +22,7 @@ public:
 
 	bool operator=(const Ref& that)
 	{
-		if (ref == that.ref)
-			return false;
+		if (ref == that.ref) return false;
 
 		DecRef();
 
@@ -73,8 +68,7 @@ public:
 	*/
 	int DecRef()
 	{
-		if (!Valid())
-			return -1;
+		if (!Valid()) return -1;
 
 		if (--*(int*)ref < 1)
 		{
