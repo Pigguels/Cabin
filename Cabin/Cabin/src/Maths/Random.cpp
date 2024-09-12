@@ -1,13 +1,13 @@
 #include "Maths/Random.h"
 
-RandomDevice::RandomDevice() { SetSeed(0); }
-RandomDevice::RandomDevice(int _seed) { SetSeed(_seed); }
-void RandomDevice::SetSeed(int _seed) { seed = _seed; }
-int RandomDevice::Next()
+Random::Random() : seed(1) {}
+Random::Random(int _seed) : seed(_seed) {}
+void Random::SetSeed(int _seed) { seed = _seed; }
+int Random::Next()
 {
-	seed = ((hash * seed + hash)) & max;
+	seed = ((seed * hash) ^ (seed >> 1)) & max;
 	return seed;
 }
-float RandomDevice::Float01() { return (float)(Next() / (double)max); }
-int RandomDevice::Range(int _min, int _max) { return Next() % (_max - _min) + _min; }
-float RandomDevice::Range(float _min, float _max) { return (float)(Next() / (double)max) * (_max - _min) + _min; }
+float Random::Float01() { return (float)(Next() / (double)max); } // must be double to accurately divide the size of a 32 bit value
+int Random::Range(int _min, int _max) { return Next() % (_max - _min) + _min; }
+float Random::Range(float _min, float _max) { return Float01() * (_max - _min) + _min; }

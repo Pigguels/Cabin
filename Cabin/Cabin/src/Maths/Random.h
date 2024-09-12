@@ -4,12 +4,11 @@
 Summary
 A Random device that will generate random numbers based off a given seed.
 */
-class RandomDevice
+class Random
 {
 public:
-
-	RandomDevice();
-	RandomDevice(int _seed);
+	Random();
+	Random(int _seed);
 
 	/*
 	Summary:
@@ -40,14 +39,9 @@ public:
 	*/
 	float Range(float _min, float _max);
 
-	const int min = 0;
-	const int max = 0x7fffffff;
+	static const unsigned int max = 0x7fffffff;
 
 private:
-	// 0x27534865 - goldilox
-	// 0x37534765 - improved
-	// 0x37a34765 - further
-	const int hash = 0x37a35765; // more
-
+	static const unsigned int hash = 0xBadDecaf;
 	int seed;
 };
