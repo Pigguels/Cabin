@@ -167,10 +167,12 @@
   <ItemGroup>
     <ClCompile Include="..\deps\GLAD\glad.c" />
     <ClCompile Include="src\Core\File.cpp" />
+    <ClCompile Include="src\Core\Types.cpp" />
     <ClCompile Include="src\Data\String.cpp" />
     <ClCompile Include="src\Data\StringManager.cpp" />
     <ClCompile Include="src\Graphics\Colour.cpp" />
     <ClCompile Include="src\Graphics\GeoManager.cpp" />
+    <ClCompile Include="src\Graphics\RenderTarget.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\ShaderManager.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
@@ -179,7 +181,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Maths\Maths.cpp" />
     <ClCompile Include="src\Maths\Random.cpp" />
-    <ClCompile Include="src\Objects\ObjectNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Debug.h" />
@@ -205,8 +206,10 @@
     <ClInclude Include="src\Data\StringFunctions.h" />
     <ClInclude Include="src\Data\StringManager.h" />
     <ClInclude Include="src\Graphics\Colour.h" />
+    <ClInclude Include="src\Graphics\ColourChannels.h" />
     <ClInclude Include="src\Graphics\GeoManager.h" />
     <ClInclude Include="src\Graphics\Geometry.h" />
+    <ClInclude Include="src\Graphics\RenderTarget.h" />
     <ClInclude Include="src\Graphics\Shader.h" />
     <ClInclude Include="src\Graphics\ShaderManager.h" />
     <ClInclude Include="src\Graphics\Texture.h" />
@@ -220,9 +223,6 @@
     <ClInclude Include="src\Maths\Vec2.h" />
     <ClInclude Include="src\Maths\Vec3.h" />
     <ClInclude Include="src\Maths\Vec4.h" />
-    <ClInclude Include="src\Objects\Object.h" />
-    <ClInclude Include="src\Objects\ObjectNode.h" />
-    <ClInclude Include="src\Objects\ObjectTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\DefaultSprite.shd" />

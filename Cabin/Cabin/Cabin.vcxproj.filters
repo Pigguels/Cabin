@@ -57,7 +57,10 @@
     <ClCompile Include="src\Graphics\GeoManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\ObjectNode.cpp">
+    <ClCompile Include="src\Graphics\RenderTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Types.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,19 +173,16 @@
     <ClInclude Include="src\Graphics\GeoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\EventHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\ObjectNode.h">
+    <ClInclude Include="src\Graphics\RenderTarget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\ObjectTypes.h">
+    <ClInclude Include="src\Graphics\ColourChannels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

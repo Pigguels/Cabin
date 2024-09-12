@@ -12,13 +12,18 @@
 
 #include "Graphics/Geometry.h"
 #include "Graphics/Vertex.h"
+#include "Graphics/Texture.h"
+#include "Graphics/RenderTarget.h"
 
 #include "Data/Stack.h"
+#include "Data/Array.h"
 #include "Core/EventHandler.h"
+#include "Maths/Random.h"
 
-#include "Objects/Object.h"
+//*
+unsigned int screenWidth = 800;
+unsigned int screenHeight = 600;
 
-/*
 int main()
 {
 	if (!glfwInit())
@@ -30,7 +35,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Cobin", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cobin", nullptr, nullptr);
 	if (!window)
 	{
 		std::cout << "window failed to create." << std::endl;
@@ -44,17 +49,29 @@ int main()
 		return -1;
 	}
 	
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, screenWidth, screenHeight);
 	glClearColor(0.17f, 0.17f, 0.2f, 0.0f);
+
+	ShaderRef screenShader = ShaderManager::GetInstance().Load("src/Shaders/DefaultScreen.shd");
+	RenderTarget renderTarget(screenWidth * 0.10f, screenHeight * 0.10f, RenderTargetType::Texture, ColourChannels::RGB);
+	GeoRef screenQuad = GeoManager::GetInstance().Create("ScreenQuad");
+	screenQuad->vertices.Add({ { -1.0f, -1.0f, 0.0f }, { 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } });
+	screenQuad->vertices.Add({ { 1.0f, -1.0f, 0.0f }, { 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } });
+	screenQuad->vertices.Add({ { -1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } });
+	screenQuad->vertices.Add({ { 1.0f, 1.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } });
+	screenQuad->indices.Add(0); screenQuad->indices.Add(1); screenQuad->indices.Add(2);
+	screenQuad->indices.Add(3); screenQuad->indices.Add(2); screenQuad->indices.Add(1);
+	screenQuad->Upload();
+
 
 	ShaderRef shader = ShaderManager::GetInstance().Load("src/Shaders/DefaultSprite.shd");
 	TextureRef texture = TextureManager::GetInstance().Load("../working/RealmPuncher_Character_01.png");
 
 	GeoRef geo = GeoManager::GetInstance().Create("Quad");
-	geo->vertices.Add({{ -0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
-	geo->vertices.Add({{ 0.5f, -0.5f, 0.0f }, { 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
-	geo->vertices.Add({{ -0.5f, 0.5f, 0.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
-	geo->vertices.Add({{ 0.5f, 0.5f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
+	geo->vertices.Add({{ -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
+	geo->vertices.Add({{ 0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
+	geo->vertices.Add({{ -0.5f, 0.5f, 0.0f }, { 0.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
+	geo->vertices.Add({{ 0.5f, 0.5f, 0.0f }, { 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f }});
 	geo->indices.Add(0); geo->indices.Add(1); geo->indices.Add(2);
 	geo->indices.Add(3); geo->indices.Add(2); geo->indices.Add(1);
 	geo->Upload();
@@ -66,8 +83,30 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
+		renderTarget.Bind();
+
+		shader->Bind();
+		texture->Bind(0);
+		geo->Bind();
 		geo->Draw();
+		geo->Unbind();
+		texture->Unbind(0);
+		shader->Unbind();
+
+		renderTarget.Unbind();
+
+		glViewport(0, 0, screenWidth, screenHeight);
+
+		screenShader->Bind();
+		glActiveTexture(GL_TEXTURE0 + 0);
+		glBindTexture(GL_TEXTURE_2D, renderTarget.GetTextureId());
+		//screenShader->SetUniform(screenShader->GetUniformLocation("image"), renderTarget.GetTextureId());
+		screenQuad->Bind();
+		screenQuad->Draw();
+		screenQuad->Unbind();
+		screenShader->Unbind();
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -78,7 +117,7 @@ int main()
 
 	return 0;
 }
-*/
+//*/
 
 /*
 void SomeEvent(void* context, void* data)
@@ -197,8 +236,3 @@ int main()
 	return 0;
 }
 */
-
-int main()
-{
-	return 0;
-}
