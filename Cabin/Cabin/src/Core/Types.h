@@ -27,7 +27,7 @@ template<typename A> struct is_same<A, A> : t_true {};
 template<typename A> struct is_class : t_constant<bool, __is_class(A)> {};
 template<typename A> struct is_union : t_constant<bool, __is_union(A)> {};
 
-namespace i
+namespace Internal
 {
 	template<typename A> t_true test_ptr_conversion(const volatile A*);
 	template<typename> t_false test_ptr_conversion(const volatile void*);
@@ -35,7 +35,7 @@ namespace i
 	template<typename B, typename D> auto test_base(int) -> decltype(test_ptr_conversion<B>(static_cast<D*>(nullptr)));
 	template<typename, typename> auto test_base(...) -> t_true;
 }
-template<typename B, typename D> struct is_base : t_constant<bool, is_class<B>::value && is_class<D>::value && decltype(i::test_base<B, D>(0))::value> {};
+template<typename B, typename D> struct is_base : t_constant<bool, is_class<B>::value && is_class<D>::value && decltype(Internal::test_base<B, D>(0))::value> {};
 
 template<class T> struct remove_reference { typedef T type; };
 template<class T> struct remove_reference<T&> { typedef T type; };
@@ -43,5 +43,20 @@ template<class T> struct remove_reference<T&&> { typedef T type; };
 
 #define THIS_TYPE() remove_reference<decltype(*this)>::type
 
-#define IMPLEMENT_ISTYPE() template<typename T> constexpr bool IsType() { return is_base<T, THIS_TYPE()>(); }
-//#define IMPLEMENT_ISTYPE() template<typename T> constexpr bool IsType() { return is_base<T, decltype(*this)>(); }
+namespace Internal { extern u32 next_id(); }
+template<typename T> struct rt_type_id {
+	static u32 id()
+	{
+		static u32 instanceId = Internal::next_id();
+		return instanceId;
+	}
+	constexpr operator u32() { return id(); }
+};
+
+static constexpr u32 ct_hash32(const char* src, u32 length, u32 delta = 0)
+{
+	return length == 0 ? delta : ct_hash32(src + 1, length - 1, (*src * 0xBadDecaf) ^ delta);
+}
+template<class C, u32 Id> constexpr u32 c_type_id() { return Id; }
+#define CT_TYPE_ID(c) c_type_id<::c, ct_hash32(#c, sizeof(#c) - 1)>()
+
