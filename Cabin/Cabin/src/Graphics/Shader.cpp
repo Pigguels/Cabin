@@ -142,87 +142,73 @@ int Shader::GetUniformLocation(const char* name) const
 {
 	return glGetUniformLocation(program, name);
 }
-void Shader::SetUniform(const char* name, const int value) const
+void Shader::SetUniform(int location, const int value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform1i(location, value);
 }
-void Shader::SetUniform(const char* name, const int* value, int count) const
+void Shader::SetUniform(int location, const int* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform1iv(location, count, value);
 }
-void Shader::SetUniform(const char* name, const float value) const
+void Shader::SetUniform(int location, const float value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform1f(location, value);
 }
-void Shader::SetUniform(const char* name, const float* value, int count) const
+void Shader::SetUniform(const int location, const float* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform1fv(location, count, value);
 }
-void Shader::SetUniform(const char* name, const Vec2 value) const
+void Shader::SetUniform(int location, const Vec2 value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform2f(location, value.x, value.y);
 }
-void Shader::SetUniform(const char* name, const Vec2* value, int count) const
+void Shader::SetUniform(int location, const Vec2* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform2fv(location, count, (float*)value);
 }
-void Shader::SetUniform(const char* name, const Vec3 value) const
+void Shader::SetUniform(int location, const Vec3 value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform3f(location, value.x, value.y, value.z);
 }
-void Shader::SetUniform(const char* name, const Vec3* value, int count) const
+void Shader::SetUniform(int location, const Vec3* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform3fv(location, count, (float*)value);
 }
-void Shader::SetUniform(const char* name, const Vec4 value) const
+void Shader::SetUniform(int location, const Vec4 value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform4f(location, value.x, value.y, value.z, value.w);
 }
-void Shader::SetUniform(const char* name, const Vec4* value, int count) const
+void Shader::SetUniform(int location, const Vec4* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniform4fv(location, count, (float*)value);
 }
-void Shader::SetUniform(const char* name, const Mat3 value) const
+void Shader::SetUniform(int location, const Mat3 value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniformMatrix3fv(location, 1, GL_FALSE, (float*)&value);
 }
-void Shader::SetUniform(const char* name, const Mat3* value, int count) const
+void Shader::SetUniform(int location, const Mat3* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniformMatrix3fv(location, count, GL_FALSE, (float*)value);
 }
-void Shader::SetUniform(const char* name, const Mat4 value) const
+void Shader::SetUniform(int location, const Mat4 value) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniformMatrix4fv(location, 1, GL_FALSE, (float*)&value);
 }
-void Shader::SetUniform(const char* name, const Mat4* value, int count) const
+void Shader::SetUniform(int location, const Mat4* value, int count) const
 {
-	int location = GetUniformLocation(name);
 	ASSERT_MSG(location != -1, "No uniform found with given name.");
 	glUniformMatrix4fv(location, count, GL_FALSE, (float*)value);
 }

@@ -24,20 +24,20 @@ public:
 	void Unbind() const;
 
 	int GetUniformLocation(const char* name) const;
-	void SetUniform(const char* name, const int value) const;
-	void SetUniform(const char* name, const int* value, int count) const;
-	void SetUniform(const char* name, const float value) const;
-	void SetUniform(const char* name, const float* value, int count) const;
-	void SetUniform(const char* name, const Vec2 value) const;
-	void SetUniform(const char* name, const Vec2* value, int count) const;
-	void SetUniform(const char* name, const Vec3 value) const;
-	void SetUniform(const char* name, const Vec3* value, int count) const;
-	void SetUniform(const char* name, const Vec4 value) const;
-	void SetUniform(const char* name, const Vec4* value, int count) const;
-	void SetUniform(const char* name, const Mat3 value) const;
-	void SetUniform(const char* name, const Mat3* value, int count) const;
-	void SetUniform(const char* name, const Mat4 value) const;
-	void SetUniform(const char* name, const Mat4* value, int count) const;
+	void SetUniform(int location, const int value) const;
+	void SetUniform(int location, const int* value, int count) const;
+	void SetUniform(int location, const float value) const;
+	void SetUniform(int location, const float* value, int count) const;
+	void SetUniform(int location, const Vec2 value) const;
+	void SetUniform(int location, const Vec2* value, int count) const;
+	void SetUniform(int location, const Vec3 value) const;
+	void SetUniform(int location, const Vec3* value, int count) const;
+	void SetUniform(int location, const Vec4 value) const;
+	void SetUniform(int location, const Vec4* value, int count) const;
+	void SetUniform(int location, const Mat3 value) const;
+	void SetUniform(int location, const Mat3* value, int count) const;
+	void SetUniform(int location, const Mat4 value) const;
+	void SetUniform(int location, const Mat4* value, int count) const;
 
 private:
 	void _LoadShaderSrc(String filepath, StringBuilder& vertexSrc, StringBuilder& fragmentSrc, StringBuilder& geometrySrc) const;
